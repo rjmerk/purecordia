@@ -1,1 +1,1 @@
-pulp --watch build --to app.js
+pulp --watch browserify --to app.js
