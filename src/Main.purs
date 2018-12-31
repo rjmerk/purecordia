@@ -4,7 +4,8 @@ import Data.Tuple (Tuple(..))
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Hedwig (Html, mount, text)
-import Hedwig.Element (div)
+import Hedwig.Element (div, img)
+import Hedwig.Property (src)
 import Prelude hiding (div)
 
 type ModelWithEffects = Tuple Model (Array (Aff Msg))
@@ -21,7 +22,9 @@ update :: Model -> Msg -> ModelWithEffects
 update model msg = Tuple model []
 
 view :: Model -> Html Msg
-view model = div [] [text "Welcome to Purecordia!"]
+view model =
+  img [src "map.png"] []
+
 
 main :: Effect Unit
 main = do
