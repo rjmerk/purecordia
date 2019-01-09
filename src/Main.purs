@@ -1,37 +1,27 @@
 module Main where
 
-import Data.Tuple (Tuple(..))
-import Effect (Effect)
-import Effect.Aff (Aff)
-import Hedwig (Html, mount, text)
-import Hedwig.Element (div, img)
-import Hedwig.Property (src)
 import Prelude hiding (div)
 
-type ModelWithEffects = Tuple Model (Array (Aff Msg))
-
-data Msg
-  = DoNothing
-
-type Model = {}
-
-init :: Model
-init = {}
-
-update :: Model -> Msg -> ModelWithEffects
-update model msg = Tuple model []
-
-view :: Model -> Html Msg
-view model =
-  img [src "map.png"] []
-
+import Data.Maybe (Maybe(Just, Nothing))
+import Effect (Effect)
+import Effect.Console (log)
+import Graphics.Canvas (CanvasImageSource, drawImage, getCanvasElementById, getContext2D, tryLoadImage)
 
 main :: Effect Unit
 main = do
-  mount "purescript-app" {
-    init: Tuple init [initAction],
-    update: update,
-    view: view
-  }
-    where
-  initAction = pure DoNothing
+  log "start"
+  tryLoadImage "map.png" reactImage
+  log "end"
+
+reactImage :: Maybe CanvasImageSource -> Effect Unit
+reactImage Nothing = log "Could not find image."
+reactImage (Just img) = do
+  log "jeee"
+  mcanvas <- getCanvasElementById "theCanvas"
+  case mcanvas of
+    Just canvas -> do
+      context <- getContext2D canvas
+      drawImage context img 0.0 0.0
+      log "success"
+    Nothing -> log "Could not find canvas"
+  
