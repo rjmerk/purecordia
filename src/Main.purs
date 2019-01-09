@@ -1,27 +1,23 @@
 module Main where
-
-import Prelude hiding (div)
-
-import Data.Maybe (Maybe(Just, Nothing))
+import Data.Maybe (Maybe(..), maybe)
 import Effect (Effect)
 import Effect.Console (log)
-import Graphics.Canvas (CanvasImageSource, drawImage, getCanvasElementById, getContext2D, tryLoadImage)
+import Graphics.Canvas (CanvasImageSource, drawImage, getCanvasElementById,
+                        getContext2D, tryLoadImage)
+import Prelude hiding (div)
 
 main :: Effect Unit
 main = do
-  log "start"
-  tryLoadImage "map.png" reactImage
-  log "end"
+  tryLoadImage
+    "map.png"
+    (maybe (log "Could not find canvas") drawCanvas)
 
-reactImage :: Maybe CanvasImageSource -> Effect Unit
-reactImage Nothing = log "Could not find image."
-reactImage (Just img) = do
-  log "jeee"
+
+drawCanvas :: CanvasImageSource -> Effect Unit
+drawCanvas img = do
   mcanvas <- getCanvasElementById "theCanvas"
   case mcanvas of
     Just canvas -> do
       context <- getContext2D canvas
       drawImage context img 0.0 0.0
-      log "success"
     Nothing -> log "Could not find canvas"
-  
