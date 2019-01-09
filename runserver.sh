@@ -1,1 +1,1 @@
-pulp --watch browserify --to app.js
+pulp --watch browserify --to assets/app.js
